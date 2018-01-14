@@ -8,11 +8,29 @@ using RCController;
 namespace BluetoothConnector
 {
 
-    class BluetoothConnection
+    sealed class BluetoothConnection
     {
+        private static BluetoothConnection instance = null;
+        private static readonly object instanceLocker = new object();
+
         IBluetoothLE ble;
         IAdapter adapter;
         bool isSearching = false;
+
+        public static BluetoothConnection Instance
+        {
+            get
+            {
+                lock (instanceLocker)
+                {
+                    if (instance == null)
+                    {
+                        instance = new BluetoothConnection();
+                    }
+                    return instance;
+                }
+            }
+        }
 
         public BluetoothConnection()
         {
