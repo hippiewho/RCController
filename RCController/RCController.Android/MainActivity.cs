@@ -1,26 +1,93 @@
 ﻿using Android.App;
 using Android.Widget;
 using Android.OS;
+using System;
 
 namespace RCController.Droid
 {
-    [Activity(Label = "RCController", MainLauncher = true, Icon = "@mipmap/icon")]
+    [Activity(Label = "RCController", MainLauncher = true, Icon = "@mipmap/icon", ScreenOrientation = Android.Content.PM.ScreenOrientation.Landscape)]
     public class MainActivity : Activity
     {
-        int count = 1;
+        Button UpButton, 
+               DownButton, 
+               LeftButton, 
+               RightButton, 
+               StartConnectionButton, 
+               EndConnectionButton;
+
+
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
+            RequestWindowFeature(Android.Views.WindowFeatures.NoTitle);
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
+            SetupViewButtons();
 
-            // Get our button from the layout resource,
-            // and attach an event to it
-            Button button = FindViewById<Button>(Resource.Id.myButton);
 
-            button.Click += delegate { button.Text = $"{count++} clicks!"; };
+        }
+
+        private void SetupViewButtons()
+        {
+            // movement buttons
+            UpButton = (Button)FindViewById(Resource.Id.MoveUpButton);
+            DownButton = (Button)FindViewById(Resource.Id.MoveDownButton);
+            LeftButton = (Button)FindViewById(Resource.Id.MoveLeftButton);
+            RightButton = (Button)FindViewById(Resource.Id.MoveRightButton);
+            
+            UpButton.Click += MoveButtonClick;
+            DownButton.Click += MoveButtonClick;
+            LeftButton.Click += MoveButtonClick;
+            RightButton.Click += MoveButtonClick;
+
+            // connection buttons
+            StartConnectionButton = (Button)FindViewById(Resource.Id.ConnectButton);
+            EndConnectionButton = (Button)FindViewById(Resource.Id.DisconnectButton);
+
+            StartConnectionButton.Click += ConnectionButtonClick;
+            EndConnectionButton.Click += ConnectionButtonClick;
+
+        }
+
+        private void MoveButtonClick(object Sender, EventArgs Events)
+        {   
+            Button button = (Button)Sender;
+            Console.WriteLine("Attempting Move Evnet" + Events.ToString());
+
+            switch (button.Id)
+            {
+                case Resource.Id.MoveUpButton:
+                    Console.WriteLine("MoveUp");
+                    break;
+                case Resource.Id.MoveDownButton:
+                    Console.WriteLine("MoveDown");
+                    break;
+                case Resource.Id.MoveLeftButton:
+                    Console.WriteLine("MoveLeft");
+                    break;
+                case Resource.Id.MoveRightButton:
+                    Console.WriteLine("MoveRight");
+                    break;
+            }
+        }
+
+        private void ConnectionButtonClick(object Sender, EventArgs Events)
+        {
+            Button button = (Button)Sender;
+            Console.WriteLine("Attempting A Connection Event\n" + Events.ToString());
+
+            switch (button.Id)
+            {
+                case Resource.Id.ConnectButton:
+                    Console.WriteLine("Attempting to Connect to BLE arduino.");
+                    break;
+                case Resource.Id.DisconnectButton:
+                    Console.WriteLine("Attempting to Disconnect from BLE arduino.");
+                    break;
+            }
         }
     }
 }
