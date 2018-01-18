@@ -2,6 +2,7 @@
 using Android.Widget;
 using Android.OS;
 using System;
+using BluetoothConnector;
 
 namespace RCController.Droid
 {
@@ -15,7 +16,7 @@ namespace RCController.Droid
                StartConnectionButton, 
                EndConnectionButton;
 
-
+        BluetoothConnection bluetoothConnection;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -26,7 +27,6 @@ namespace RCController.Droid
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
             SetupViewButtons();
-
 
         }
 
@@ -55,8 +55,6 @@ namespace RCController.Droid
         private void MoveButtonClick(object Sender, EventArgs Events)
         {   
             Button button = (Button)Sender;
-            Console.WriteLine("Attempting Move Evnet" + Events.ToString());
-
             switch (button.Id)
             {
                 case Resource.Id.MoveUpButton:
@@ -74,18 +72,19 @@ namespace RCController.Droid
             }
         }
 
-        private void ConnectionButtonClick(object Sender, EventArgs Events)
+        private async void ConnectionButtonClick(object Sender, EventArgs Events)
         {
             Button button = (Button)Sender;
-            Console.WriteLine("Attempting A Connection Event\n" + Events.ToString());
-
             switch (button.Id)
             {
                 case Resource.Id.ConnectButton:
-                    Console.WriteLine("Attempting to Connect to BLE arduino.");
+                    bluetoothConnection = new BluetoothConnection();
+                    await bluetoothConnection.StartSearchingForDevicesAsync();
+                    
                     break;
                 case Resource.Id.DisconnectButton:
-                    Console.WriteLine("Attempting to Disconnect from BLE arduino.");
+                    //bluetoothConnection.StopSearchingForDevices();
+                    bluetoothConnection.ShowArrayList();
                     break;
             }
         }

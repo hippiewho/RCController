@@ -17,14 +17,14 @@ namespace RCController
                 String XMLPrefix = "RCController.Android";
 #endif
 
-            var assembly = typeof(BluetoothConnection).GetTypeInfo().Assembly;
-            Stream stream = assembly.GetManifestResourceStream(XMLPrefix + "GlobalSettings.xml");
-            XmlDocument settings = new XmlDocument();
-            settings.LoadXml(stream.ToString());
-            XmlNode node = settings.SelectSingleNode("Devices/Device");
-            
-            return node.Attributes["Name"]?.InnerText;
+            //var assembly = typeof(BluetoothConnection).GetTypeInfo().Assembly;
+            //Stream stream = assembly.GetManifestResourceStream(XMLPrefix + "GlobalSettings.xml");
+            //XmlDocument settings = new XmlDocument();
+            //settings.LoadXml(stream.ToString());
+            //XmlNode node = settings.SelectSingleNode("Devices/Device");
 
+            //return node.Attributes["Name"]?.InnerText;
+            return "SH-HC-08";
         }
     }
 }
