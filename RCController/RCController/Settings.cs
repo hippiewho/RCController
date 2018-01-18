@@ -8,6 +8,12 @@ namespace RCController
 {
     static class Settings
     {
+        public static int ScanOutTime { get
+            {
+                return 10000;
+            }
+        }
+
         public static String GetDeviceName()
         {
 #if __IOS__

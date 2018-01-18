@@ -58,6 +58,7 @@ namespace RCController.Droid
             switch (button.Id)
             {
                 case Resource.Id.MoveUpButton:
+                    bluetoothConnection.PushData();
                     Console.WriteLine("MoveUp");
                     break;
                 case Resource.Id.MoveDownButton:
@@ -78,7 +79,7 @@ namespace RCController.Droid
             switch (button.Id)
             {
                 case Resource.Id.ConnectButton:
-                    bluetoothConnection = new BluetoothConnection();
+                    if (bluetoothConnection == null) bluetoothConnection = new BluetoothConnection();
                     await bluetoothConnection.StartSearchingForDevicesAsync();
                     
                     break;
