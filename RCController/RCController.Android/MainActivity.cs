@@ -58,16 +58,19 @@ namespace RCController.Droid
             switch (button.Id)
             {
                 case Resource.Id.MoveUpButton:
-                    bluetoothConnection.PushData();
+                    bluetoothConnection.PushData(1);
                     Console.WriteLine("MoveUp");
                     break;
                 case Resource.Id.MoveDownButton:
+                    bluetoothConnection.PushData(2);
                     Console.WriteLine("MoveDown");
                     break;
                 case Resource.Id.MoveLeftButton:
+                    bluetoothConnection.PushData(3);
                     Console.WriteLine("MoveLeft");
                     break;
                 case Resource.Id.MoveRightButton:
+                    bluetoothConnection.PushData(4);
                     Console.WriteLine("MoveRight");
                     break;
             }
@@ -80,12 +83,13 @@ namespace RCController.Droid
             {
                 case Resource.Id.ConnectButton:
                     if (bluetoothConnection == null) bluetoothConnection = new BluetoothConnection();
+                    button.Enabled = false;
                     await bluetoothConnection.StartSearchingForDevicesAsync();
-                    
+                    button.Enabled = true;
                     break;
                 case Resource.Id.DisconnectButton:
-                    //bluetoothConnection.StopSearchingForDevices();
-                    bluetoothConnection.ShowArrayList();
+                    bluetoothConnection.StopSearchingForDevices();
+                    //bluetoothConnection.ShowArrayList();
                     break;
             }
         }

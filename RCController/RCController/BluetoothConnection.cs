@@ -66,12 +66,9 @@ namespace BluetoothConnector
                 {
                     isSearching = true;
                     await adapter.StartScanningForDevicesAsync();
-                    //await adapter.StartScanningForDevicesAsync(dev => dev.Name.Contains(Settings.GetDeviceName()));
-
                     ConnectedDevice = await GetSpecifiedDevice();
-
+                    if (ConnectedDevice != null) StopSearchingForDevices();
                     await adapter.ConnectToDeviceAsync(ConnectedDevice);
-                    Console.WriteLine(ConnectedDevice.Id);
                 }
                 catch (Exception e)
                 {
@@ -87,10 +84,11 @@ namespace BluetoothConnector
         {
             try
             {
-                var suspectedDevice =  await adapter.DiscoverDeviceAsync(dev => dev.Name.Equals(Settings.GetDeviceName()));
+                var suspectedDevice =  await adapter.DiscoverDeviceAsync(dev => dev.Name.Equals(Settings.BluetoothDeviceName));
                 return suspectedDevice;
             } catch(NullReferenceException e)
-            {
+            {   
+
                 return null;
             }
         }
@@ -117,36 +115,60 @@ namespace BluetoothConnector
             }
         }
 
-        public async void PushData(int data = 0)
+        public async void ListServicesAndCharacteristics()
         {
             if (ConnectedDevice != null) {
                 var services = await ConnectedDevice.GetServicesAsync();
-                Debug.WriteLine("Print Services");
+                Debug.WriteLine("Print Services and Characteristics:");
                 foreach(IService s in services)
                 {
                     Debug.WriteLine("Service Name: " + s.Name + " - isPrimary: " + s.IsPrimary + " - With ID: " + s.Id);
                     var characteristics = await s.GetCharacteristicsAsync();
-                    char charCount = 'H';
                     foreach (ICharacteristic c in characteristics)
                     {
                         Debug.WriteLine("\tCharacteristic Name: " + c.Name + " - ID: " + c.Id + " - Properties: " + c.Properties + " - UUID: " + c.Uuid + "\n\t\t\tCan R W U: " + c.CanRead + c.CanWrite + c.CanUpdate);
-                        if (c.CanWrite && "0000ffe1-0000-1000-8000-00805f9b34fb".Equals(c.Uuid))
-                        {
-                            byte[] dataa = {0x48};
-                            await c.WriteAsync(dataa);
-                            Debug.WriteLine("----------------------------------\n---------------------------SENT " + charCount);
-                            c.ValueUpdated += (aas, e) =>
-                            {
-                                Debug.WriteLine("New value: {0}", e.Characteristic.Value);
-                            };
-                        }
                     }
                 }
-                //var characteristics = await services.GetCharacteristicsAsync();
+            }
+        }
+
+        public async void PushData(int direction = 0)
+        {
+            if (ConnectedDevice != null)
+            {
+                var service = await ConnectedDevice.GetServiceAsync(Settings.ServiceGuid);
+                var characteristic = await service.GetCharacteristicAsync(Settings.CharacteristicGuid);
+
+                if (characteristic.CanWrite)
+                {
+                    
+                    byte[] payload = { GetByteFormat(direction) };
+
+                    await characteristic.WriteAsync(payload);
+                    characteristic.ValueUpdated += (aas, e) =>
+                    {
+                        Debug.WriteLine($"New value: {e.Characteristic.Value}");
+                    };
+                }
+            }
+        }
+
+        private byte GetByteFormat(int direction = 0)
+        {
+            switch (direction)
+            {
+                case 1:
+                    return 0x1;
+                case 2:
+                    return 0x2;
+                case 3:
+                    return 0x3;
+                case 4:
+                    return 0x4;
+                default:
+                    return 0x0;
 
             }
-
-
         }
     }
 }

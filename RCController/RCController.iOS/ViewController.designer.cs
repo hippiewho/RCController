@@ -14,9 +14,6 @@ namespace RCController.iOS
     partial class ViewController
     {
         [Outlet]
-        UIKit.UIButton Button { get; set; }
-
-        [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton ConnectBluetoothButton { get; set; }
 
@@ -47,6 +44,10 @@ namespace RCController.iOS
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIView OptionsView { get; set; }
+
+        [Action ("ConnectionButtonPressed:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void ConnectionButtonPressed (UIKit.UIButton sender);
 
         void ReleaseDesignerOutlets ()
         {

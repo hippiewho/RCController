@@ -11,7 +11,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController" useStoryboardIdentifierAsRestorationIdentifier="YES" storyboardIdentifier="ControllerView">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -28,14 +28,17 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="228" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
                                         <rect key="frame" x="156" y="49" width="63" height="30"/>
                                         <state key="normal" title="UP"/>
+                                        <connections/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="229" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
                                         <rect key="frame" x="46" y="182" width="63" height="30"/>
                                         <state key="normal" title="LEFT"/>
+                                        <connections/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="230" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
                                         <rect key="frame" x="251" y="182" width="63" height="30"/>
                                         <state key="normal" title="RIGHT"/>
+                                        <connections/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="231" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
                                         <rect key="frame" x="156" y="275" width="63" height="30"/>
@@ -55,10 +58,14 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="286" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
                                         <rect key="frame" x="101" y="46" width="169" height="30"/>
                                         <state key="normal" title="Connect To RC"/>
+                                        <connections>
+                                            <action selector="ConnectionButtonPressed:" destination="BYZ-38-t0r" id="950" eventType="touchUpInside"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="536" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
                                         <rect key="frame" x="101" y="128" width="169" height="30"/>
                                         <state key="normal" title="Disconnect From RC"/>
+                                        <connections/>
                                     </button>
                                 </subviews>
                                 <constraints>
