@@ -49,6 +49,10 @@ namespace RCController.iOS
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ConnectionButtonPressed (UIKit.UIButton sender);
 
+        [Action ("MoveButtonPressed:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void MoveButtonPressed (UIKit.UIButton sender);
+
         void ReleaseDesignerOutlets ()
         {
             if (ConnectBluetoothButton != null) {

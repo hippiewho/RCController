@@ -16,7 +16,7 @@ namespace RCController.Droid
                StartConnectionButton, 
                EndConnectionButton;
 
-        BluetoothConnection bluetoothConnection;
+        BluetoothConnection bluetoothConnection = new BluetoothConnection();
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -82,14 +82,12 @@ namespace RCController.Droid
             switch (button.Id)
             {
                 case Resource.Id.ConnectButton:
-                    if (bluetoothConnection == null) bluetoothConnection = new BluetoothConnection();
                     button.Enabled = false;
-                    await bluetoothConnection.StartSearchingForDevicesAsync();
+                    await bluetoothConnection.StartSearchingForArduinoToConnectAsync();
                     button.Enabled = true;
                     break;
                 case Resource.Id.DisconnectButton:
                     bluetoothConnection.StopSearchingForDevices();
-                    //bluetoothConnection.ShowArrayList();
                     break;
             }
         }

@@ -19,8 +19,8 @@ namespace BluetoothConnector
         private IBluetoothLE ble;
         private IAdapter adapter;
         private bool isSearching = false;
+        private bool isConnected = false;
         private ArrayList DeviceList = new ArrayList();
-        private IList<ICharacteristic> _characteristics;
         private IDevice ConnectedDevice = null;
 
         public static BluetoothConnection Instance
@@ -37,6 +37,9 @@ namespace BluetoothConnector
                 }
             }
         }
+
+        public bool IsSearching { get => isSearching; set => isSearching = value; }
+        public bool IsConnected { get => isConnected; set => isConnected = value; }
 
         public BluetoothConnection()
         {
@@ -58,17 +61,21 @@ namespace BluetoothConnector
             adapter.ScanTimeout = Settings.ScanOutTime;
         }
 
-        public async Task StartSearchingForDevicesAsync()
+        public async Task StartSearchingForArduinoToConnectAsync()
         {
-            if (!isSearching)
+            if (!IsSearching)
             {
                 try
                 {
-                    isSearching = true;
+                    IsSearching = true;
                     await adapter.StartScanningForDevicesAsync();
                     ConnectedDevice = await GetSpecifiedDevice();
-                    if (ConnectedDevice != null) StopSearchingForDevices();
-                    await adapter.ConnectToDeviceAsync(ConnectedDevice);
+                    if (ConnectedDevice != null)
+                    {
+                        IsConnected = true;
+                        StopSearchingForDevices();
+                        await adapter.ConnectToDeviceAsync(ConnectedDevice);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -78,6 +85,7 @@ namespace BluetoothConnector
                     StopSearchingForDevices();
                 }
             }
+            IsSearching = false;
         }
 
         private async Task<IDevice> GetSpecifiedDevice()
@@ -87,8 +95,8 @@ namespace BluetoothConnector
                 var suspectedDevice =  await adapter.DiscoverDeviceAsync(dev => dev.Name.Equals(Settings.BluetoothDeviceName));
                 return suspectedDevice;
             } catch(NullReferenceException e)
-            {   
-
+            {
+                Console.Write(e.Message);
                 return null;
             }
         }
@@ -96,14 +104,15 @@ namespace BluetoothConnector
         private async Task ConnectToDevice(IDevice device)
         {
             await adapter.ConnectToDeviceAsync(device);
+            
         }
 
         public async void StopSearchingForDevices()
         {
-            if (isSearching)
+            if (IsSearching)
             {
                 await adapter.StopScanningForDevicesAsync();
-                isSearching = false;
+                IsSearching = false;
             }
         }
 
@@ -134,16 +143,14 @@ namespace BluetoothConnector
 
         public async void PushData(int direction = 0)
         {
-            if (ConnectedDevice != null)
+            if (ConnectedDevice != null && IsConnected)
             {
                 var service = await ConnectedDevice.GetServiceAsync(Settings.ServiceGuid);
                 var characteristic = await service.GetCharacteristicAsync(Settings.CharacteristicGuid);
 
                 if (characteristic.CanWrite)
                 {
-                    
                     byte[] payload = { GetByteFormat(direction) };
-
                     await characteristic.WriteAsync(payload);
                     characteristic.ValueUpdated += (aas, e) =>
                     {
@@ -170,5 +177,14 @@ namespace BluetoothConnector
 
             }
         }
+        public void DisconnectDevice()
+        {
+            if (ConnectedDevice != null && IsConnected)
+            {
+                adapter.DisconnectDeviceAsync(ConnectedDevice);
+                IsConnected = false;
+            }
+        }
     }
+
 }

@@ -28,7 +28,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="228" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
                                         <rect key="frame" x="156" y="49" width="63" height="30"/>
                                         <state key="normal" title="UP"/>
-                                        <connections/>
+                                        <connections>
+                                            <action selector="MoveButtonPressed:" destination="BYZ-38-t0r" id="1434" eventType="touchUpInside"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="229" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
                                         <rect key="frame" x="46" y="182" width="63" height="30"/>
